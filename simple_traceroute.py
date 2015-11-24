@@ -45,15 +45,15 @@ def main(destination):
             recv_socket.close()
 
         # print the data
-        if curr_addr is not None:
-                curr_host = "%s (%s)" % (curr_name, curr_addr)
+        if current_adress is not None:
+                curr_host = "%s (%s)" % (current_name, current_adress)
         else:
-            curr_host = "*"
-        print "%d\t%s" % (ttl, curr_host)
+            current_host = "*"
+        print "%d\t%s" % (ttl, current_host)
 
         ttl += 1
         # break out the loop when the following are true:
-        if curr_addr == dest_addr or ttl > max_hops:
+        if current_adress == dest_address or ttl > max_hops:
             break
 
 if __name__ == '__main__':
