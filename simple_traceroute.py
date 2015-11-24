@@ -1,6 +1,6 @@
 import socket
 
-def main(destination):ter
+def main(destination):
     # get the IP address of the destination adress
     dest_address = socket.gethostbyname(destination)
     port = 33434
