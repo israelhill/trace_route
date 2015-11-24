@@ -1,6 +1,6 @@
 import socket
 
-def main(destination):
+def main(destination):ter
     # get the IP address of the destination adress
     dest_address = socket.gethostbyname(destination)
     port = 33434
@@ -47,9 +47,9 @@ def main(destination):
         # print the data
         if curr_addr is not None:
                 curr_host = "%s (%s)" % (curr_name, curr_addr)
-            else:
-                curr_host = "*"
-            print "%d\t%s" % (ttl, curr_host)
+        else:
+            curr_host = "*"
+        print "%d\t%s" % (ttl, curr_host)
 
         ttl += 1
         # break out the loop when the following are true:
