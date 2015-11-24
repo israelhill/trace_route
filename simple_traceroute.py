@@ -46,7 +46,7 @@ def main(destination):
 
         # print the data
         if current_adress is not None:
-                curr_host = "%s (%s)" % (current_name, current_adress)
+                current_host = "%s (%s)" % (current_name, current_adress)
         else:
             current_host = "*"
         print "%d\t%s" % (ttl, current_host)
