@@ -14,7 +14,7 @@ def main(destination):
     while True:
         recv_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, icmp)
         send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, udp)
-        send_socket.set_sockopt(socket.SOL_IP, socket.IP_TTL, ttl)
+        send_socket.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
 
         # bind the adress to recv_socket. empty string because we are accepting
         # packets from any host on port 33434 (unlikely port)
