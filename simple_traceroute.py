@@ -10,6 +10,7 @@ def main(destination):
     udp = socket.getprotobyname('udp')
     # Start the time to live at 1
     ttl = 1
+    max_hops = 30
 
     while True:
         recv_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, icmp)
