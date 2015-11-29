@@ -29,7 +29,6 @@ def main(destination):
     ready = select.select([recv_socket], [], [], 10.0)
 
     if ready:
-        print "Ready was True!"
         rcvd_packet, current_address = None
         try:
             # get data from the recv_socket,
@@ -42,10 +41,9 @@ def main(destination):
             print "Received Packet: " + rcvd_packet
         except socket.error:
             pass
-
-    finally:
-        send_socket.close()
-        recv_socket.close()
+        finally:
+            send_socket.close()
+            recv_socket.close()
 
 if __name__ == '__main__':
     main('google.com')
