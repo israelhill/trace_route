@@ -42,9 +42,5 @@ def main(destination):
         send_socket.close()
         recv_socket.close()
 
-    # break out the loop when the following are true:
-    if current_address == dest_address or ttl > max_hops:
-        break
-
 if __name__ == '__main__':
     main('google.com')
