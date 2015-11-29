@@ -34,16 +34,24 @@ def main(destination):
             # get data from the recv_socket,
             # recvfrom() returns the packet data and adress
             rcvd_packet, current_address = recv_socket.recvfrom(1500)
-
             # get the IP address
             current_address = current_address[0]
-
             print "Received Packet: " + rcvd_packet
+
+            icmp_header = recvd_packet[20:28]
+            icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
+            print "Type : " + icmp_type + "\n"
+            print "Code: " + code
+            print "Checksum: " + checksum  + "\n"
+            print "PID: " + pid + "\n"
+            print "Seq: " + seq + "\n"
         except socket.error:
             pass
         finally:
             send_socket.close()
             recv_socket.close()
+    else:
+        print "** TIMED OUT **"
 
 if __name__ == '__main__':
     main('google.com')
