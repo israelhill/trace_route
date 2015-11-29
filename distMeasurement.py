@@ -1,6 +1,6 @@
 import socket
 
-def main(destination)
+def main(destination):
     # get the IP address of the destination adress
     dest_address = socket.gethostbyname(destination)
     port = 33434
@@ -10,11 +10,12 @@ def main(destination)
     udp = socket.getprotobyname('udp')
     # Start the time to live at 1
     ttl = 1
+    max_hops = 30
 
     while True:
         recv_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, icmp)
         send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, udp)
-        send_socket.set_sockopt(socket.SOL_IP, socket.IP_TTL, ttl)
+        send_socket.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
 
         # bind the adress to recv_socket. empty string because we are accepting
         # packets from any host on port 33434 (unlikely port)
@@ -24,36 +25,28 @@ def main(destination)
         # on an unlikely port
         send_socket.sendto("", (destination, port))
 
-        current_adress = None
+        rcvd_packet, current_address = None
         try:
             # get data from the recv_socket,
             # recvfrom() returns the packet data and adress
-            # we dont care about the packet data so we use _
-            _, current_adress = recv_socket.recvfrom(512)
+            rcvd_packet, current_address = recv_socket.recvfrom(1500)
 
             # get the IP address
-            current_adress = current_adress[0]
+            current_address = current_address[0]
             try:
                 # reverse DNS lookup
-                current_name = socket.gethostbyaddr(current_adress)[0]
+                current_name = socket.gethostbyaddr(current_address)[0]
             except socket.error:
-                current_name = current_adress
+                current_name = current_address
         except socket.error:
             pass
         finally:
             send_socket.close()
             recv_socket.close()
 
-        # print the data
-        if curr_addr is not None:
-                curr_host = "%s (%s)" % (curr_name, curr_addr)
-            else:
-                curr_host = "*"
-            print "%d\t%s" % (ttl, curr_host)
-
         ttl += 1
         # break out the loop when the following are true:
-        if curr_addr == dest_addr or ttl > max_hops:
+        if current_address == dest_address or ttl > max_hops:
             break
 
 if __name__ == '__main__':
