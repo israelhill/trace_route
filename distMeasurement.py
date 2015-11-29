@@ -26,7 +26,8 @@ def main(destination):
     # Send no data (empty string) to the destination host
     # on an unlikely port
     send_socket.sendto("", (destination, port))
-    ready = select.select([recv_socket], [], [], 3.0)
+    ready = select.select([recv_socket], [], [], 10.0)
+    print "ready :" + ready[0]
 
     rcvd_packet, current_address = None
     try:
