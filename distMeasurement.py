@@ -27,22 +27,22 @@ def main(destination):
     # on an unlikely port
     send_socket.sendto("", (destination, port))
     ready = select.select([recv_socket], [], [], 10.0)
-    print "ready"
-    for thing in ready[0]:
-        print "***  " + thing
 
-    rcvd_packet, current_address = None
-    try:
-        # get data from the recv_socket,
-        # recvfrom() returns the packet data and adress
-        rcvd_packet, current_address = recv_socket.recvfrom(1500)
+    if ready:
+        print "Ready was True!"
+        rcvd_packet, current_address = None
+        try:
+            # get data from the recv_socket,
+            # recvfrom() returns the packet data and adress
+            rcvd_packet, current_address = recv_socket.recvfrom(1500)
 
-        # get the IP address
-        current_address = current_address[0]
+            # get the IP address
+            current_address = current_address[0]
 
-        print "Received Packet: " + rcvd_packet
-    except socket.error:
-        pass
+            print "Received Packet: " + rcvd_packet
+        except socket.error:
+            pass
+
     finally:
         send_socket.close()
         recv_socket.close()
