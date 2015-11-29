@@ -40,7 +40,7 @@ def main(destination):
             print "Received Packet: " + rcvd_packet
 
             icmp_header = rcvd_packet[20:28]
-            ip_header = rcvd_packet[8:12]
+            ip_header = rcvd_packet[36:40]
 
             icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
             remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
