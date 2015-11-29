@@ -27,7 +27,9 @@ def main(destination):
     # on an unlikely port
     send_socket.sendto("", (destination, port))
     ready = select.select([recv_socket], [], [], 10.0)
-    print "ready :" + ready[0]
+    print "ready"
+    for thing in ready[0]:
+        print "***  " + thing
 
     rcvd_packet, current_address = None
     try:
