@@ -1,5 +1,6 @@
 import socket
 import select
+import struct
 
 def main(destination):
     # get the IP address of the destination adress
@@ -38,13 +39,15 @@ def main(destination):
             current_address = current_address[0]
             print "Received Packet: " + rcvd_packet
 
-            icmp_header = recvd_packet[20:28]
+            icmp_header = rcvd_packet[20:28]
+            ip_header = rcvd_packet[8:12]
+
             icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
-            print "Type : " + icmp_type + "\n"
-            print "Code: " + code
-            print "Checksum: " + checksum  + "\n"
-            print "PID: " + pid + "\n"
-            print "Seq: " + seq + "\n"
+            remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
+
+            print "TTL : ", remaining_ttl + "\n"
+            print "Protocol: ",  code, "\n"
+            print "Checksum: ", checksum, "\n"
         except socket.error:
             pass
         finally:
