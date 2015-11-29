@@ -45,7 +45,7 @@ def main(destination):
             icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
             remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
 
-            print "TTL : ", remaining_ttl + "\n"
+            print "TTL : ", remaining_ttl, "\n"
             print "Protocol: ",  code, "\n"
             print "Checksum: ", checksum, "\n"
         except socket.error:
