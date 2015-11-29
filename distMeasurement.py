@@ -29,7 +29,7 @@ def main(destination):
     ready = select.select([recv_socket], [], [], 10.0)
 
     if ready:
-        rcvd_packet, current_address = None
+        rcvd_packet = current_address = None
         try:
             # get data from the recv_socket,
             # recvfrom() returns the packet data and adress
