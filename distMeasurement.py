@@ -33,7 +33,7 @@ def main(destination):
     send_socket.sendto("", (destination, port))
     ready = select.select([recv_socket], [], [], 10.0)
 
-    if ready[0]:
+    if ready:
         rcvd_packet = current_address = None
         try:
             rcv_time = time.time()
@@ -56,8 +56,8 @@ def main(destination):
 
             num_hops = ttl - remaining_ttl + 1
             RTT = (rcv_time - send_time) * MILLISECONDS
-            print "Number of Hops: " + num_hops
-            print "Round Trip Time: " + RTT
+            print "Number of Hops: ", num_hops
+            print "Round Trip Time: ", RTT
         except socket.error:
             pass
         finally:
