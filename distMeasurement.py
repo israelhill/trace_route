@@ -33,38 +33,35 @@ def main(destination):
     send_socket.sendto("", (destination, port))
     ready = select.select([recv_socket], [], [], 10.0)
 
-    if ready:
-        rcvd_packet = current_address = None
-        try:
-            rcv_time = time.time()
-            # get data from the recv_socket,
-            # recvfrom() returns the packet data and adress
-            rcvd_packet, current_address = recv_socket.recvfrom(1500)
-            # get the IP address
-            current_address = current_address[0]
-            print "Received Packet: " + rcvd_packet
+    rcvd_packet = current_address = None
+    try:
+        rcv_time = time.time()
+        # get data from the recv_socket,
+        # recvfrom() returns the packet data and adress
+        rcvd_packet, current_address = recv_socket.recvfrom(1500)
+        # get the IP address
+        current_address = current_address[0]
+        print "Received Packet: " + rcvd_packet
 
-            icmp_header = rcvd_packet[20:28]
-            ip_header = rcvd_packet[36:40]
+        icmp_header = rcvd_packet[20:28]
+        ip_header = rcvd_packet[36:40]
 
-            icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
-            remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
+        icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
+        remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
 
-            print "TTL : ", remaining_ttl, "\n"
-            print "Protocol: ",  code, "\n"
-            print "Checksum: ", checksum, "\n"
+        print "TTL : ", remaining_ttl, "\n"
+        print "Protocol: ",  code, "\n"
+        print "Checksum: ", checksum, "\n"
 
-            num_hops = ttl - remaining_ttl + 1
-            RTT = (rcv_time - send_time) * MILLISECONDS
-            print "Number of Hops: ", num_hops
-            print "Round Trip Time: ", RTT
-        except socket.error:
-            pass
-        finally:
-            send_socket.close()
-            recv_socket.close()
-    else:
-        print "** TIMED OUT **"
+        num_hops = ttl - remaining_ttl + 1
+        RTT = (rcv_time - send_time) * MILLISECONDS
+        print "Number of Hops: ", num_hops
+        print "Round Trip Time: ", RTT
+    except socket.error:
+        pass
+    finally:
+        send_socket.close()
+        recv_socket.close()
 
 if __name__ == '__main__':
-    main('google.com')
+    main('facebook.com')
