@@ -8,6 +8,7 @@ TIMEOUT = 1.5
 RETRIES = 7
 
 def main(destination):
+    print "Destination: " + destination
     print "Attempting to reach host........."
     for _ in range(RETRIES):
         # get the IP address of the destination adress
@@ -82,4 +83,7 @@ def main(destination):
         print "Timed Out."
 
 if __name__ == '__main__':
-    main('state.gov')
+    with open('hosts.txt', 'r') as hosts:
+        for line in hosts:
+            site = line.replace('\n', "")
+            main(site)
