@@ -1,12 +1,18 @@
 import urllib2
-from math import sin, cos, asin, sqrt
+import socket
+from math import sin, cos, asin, sqrt, radians
 from xml.dom.minidom import parseString
 
 KM = 6367
 
 def main():
     ip = get_ip()
-    get_location(ip)
+    kfc = socket.gethostbyname("kfc.com")
+    # ip2 = "184.51.126.194"
+    lat1, long1 = get_location(ip)
+    lat2, long2 = get_location(kfc)
+    distance = compute_haversine(lat1, long1, lat2, long2)
+    print "Distance is: ", distance
 
 def get_ip():
     ip = urllib2.urlopen('http://ip.42.pl/raw').read()
@@ -27,20 +33,20 @@ def get_location(ip_address):
 
     return latitude, longitude
 
-    def compute_haversine(lat1, long1, lat2, long2):
+def compute_haversine(lat1, long1, lat2, long2):
     #convert the coordinates to radians
-    latitude1 = math.radians(lat1)
-    longitude1 = math.radians(long1)
-    latitude2 = math.radians(lat2)
-    longitude2 = math.radians(long2)
+    latitude1 = radians(lat1)
+    longitude1 = radians(long1)
+    latitude2 = radians(lat2)
+    longitude2 = radians(long2)
 
     latitude_dist = latitude2 - latitude1
     longitude_dist = longitude2 - longitude1
 
-    a = math.sin(latitude_dist/2)**2 + math.cos(latitude1) * math.cos(latitude2) * math.sin(longitude/2)**2
-    c = 2 * math.asin(sqrt(a))
+    a = sin(latitude_dist/2)**2 + cos(latitude1) * cos(latitude2) * sin(longitude_dist/2)**2
+    c = 2 * asin(sqrt(a))
 
-    # convert to km and return
+    # convert distance to Kilometers
     return c * KM
 
 
