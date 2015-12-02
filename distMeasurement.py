@@ -49,9 +49,18 @@ def main(destination):
 
         icmp_header = rcvd_packet[20:28]
         ip_header = rcvd_packet[36:40]
+        original_ip_header = rcvd_packet[28:48]
 
         icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
         remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
+        original_ip_header_data = struct.unpack_from("!BBHHHBBHII", original_ip_header)
+        dest_port = struct.unpack("!H", rcvd_packet[50:52])[0]
+
+        org_dest_ip = original_ip_header_data[9]
+
+        original_destination_ip = socket.inet_ntoa(struct.pack("!L", org_dest_ip))
+        print "Original destination IP: " +  original_destination_ip
+        print "Original destination port:", dest_port
 
         num_hops = ttl - remaining_ttl + 1
         RTT = (rcv_time - send_time) * MILLISECONDS
