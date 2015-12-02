@@ -2,9 +2,9 @@ import socket
 import select
 import struct
 import time
-import matplotlib.pyplot as plt
-import numpy
-import geo_distance as geo
+# import matplotlib.pyplot as plt
+# import numpy
+# import geo_distance as geo
 
 # CONSTANTS
 MILLISECONDS = 1000
