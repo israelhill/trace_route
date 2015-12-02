@@ -1,3 +1,5 @@
+#FROM THE ORACLE WEBSITE 
+
 import socket
 
 def main(destination):

@@ -57,7 +57,7 @@ def main(destination):
         RTT = (rcv_time - send_time) * MILLISECONDS
         print "Number of Hops: ", num_hops
         print "Round Trip Time: ", RTT
-    except (socket.error, socket.timeout):
+    except (socket.error, socket.timeout) as e:
         print "Timed out"
     finally:
         send_socket.close()
