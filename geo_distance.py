@@ -70,8 +70,8 @@ def compute_haversine(lat1, long1, lat2, long2):
 
 
 
-# if __name__ == '__main__':
-def run():
+if __name__ == '__main__':
+# def run():
     with open('targets.txt', 'r') as hosts:
         for line in hosts:
             site = line.replace('\n', "")
@@ -80,4 +80,4 @@ def run():
     # for d in distances:
     #     print d
 
-    return distances
+    # return distances

@@ -1,17 +1,10 @@
 google.com
 facebook.com
-twitter.com
 reddit.com
 kfc.com
-java.com
 stackoverflow.com
 case.edu
-mit.edu
-blogger.com
-genius.com
 126.com
 hubspot.com
 telegraph.co.uk
-google.de
-youtube.com
 life.com.tw

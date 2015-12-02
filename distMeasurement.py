@@ -107,26 +107,25 @@ if __name__ == '__main__':
             site = line.replace('\n', "")
             main(site)
 
-    dist_array = geo.run()
-    for d in dist_array:
-        print d
+    # dist_array = geo.run()
 
-    print "Correlation Hops vs Distance: ", numpy.corrcoef(hops, dist_array)[0][1]
-    plt.plot(hops, dist_array, 'ro')
-    plt.xlabel('Number of Hops')
-    plt.ylabel('Geographical Distance')
-    plt.show()
+    # Create plot for HOPS vs DISTANCE
+    # print "Correlation Hops vs Distance: ", numpy.corrcoef(hops, dist_array)[0][1]
+    # plt.plot(hops, dist_array, 'ro')
+    # plt.xlabel('Number of Hops')
+    # plt.ylabel('Geographical Distance')
+    # plt.show()
 
-    print "Correlation RTT vs Distance: ", numpy.corrcoef(rtt_counts, dist_array)[0][1]
-    plt.plot(rtt_counts, dist_array, 'ro')
-    plt.xlabel('RTT')
-    plt.ylabel('Geographical Distance')
-    plt.show()
+    # Create plot for RTT vs DISTANCE
+    # print "Correlation RTT vs Distance: ", numpy.corrcoef(rtt_counts, dist_array)[0][1]
+    # plt.plot(rtt_counts, dist_array, 'ro')
+    # plt.xlabel('RTT')
+    # plt.ylabel('Geographical Distance')
+    # plt.show()
 
-    print "Correlation Hops vs RTT: ", numpy.corrcoef(hops, rtt_counts)[0][1]
-    plt.plot(hops, rtt_counts, 'ro')
-    plt.ylabel('RTT Values')
-    plt.xlabel('Hop Counts')
-    plt.show()
-
-    print "Finished!"
+    # Create plot for HOPS vs RTT
+    # print "Correlation Hops vs RTT: ", numpy.corrcoef(hops, rtt_counts)[0][1]
+    # plt.plot(hops, rtt_counts, 'ro')
+    # plt.ylabel('RTT Values')
+    # plt.xlabel('Hop Counts')
+    # plt.show()
