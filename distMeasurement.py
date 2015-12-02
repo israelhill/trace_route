@@ -8,6 +8,7 @@ TIMEOUT = 1.5
 RETRIES = 7
 
 def main(destination):
+    print "Attempting to reach host........."
     for _ in range(RETRIES):
         # get the IP address of the destination adress
         dest_address = socket.gethostbyname(destination)
@@ -19,8 +20,6 @@ def main(destination):
         # Start the time to live at 1
         ttl = 32
         max_hops = 128
-
-
 
         recv_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, icmp)
         send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, udp)
@@ -73,6 +72,7 @@ def main(destination):
             print "Number of Hops: ", num_hops
             print "Round Trip Time: ", RTT
             break
+
         except (socket.error, socket.timeout) as e:
             pass
         finally:
@@ -82,4 +82,4 @@ def main(destination):
         print "Timed Out."
 
 if __name__ == '__main__':
-    main('reddit.com')
+    main('state.gov')
