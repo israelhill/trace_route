@@ -2,6 +2,7 @@ import socket
 import select
 import struct
 import time
+import matplotlib.pyplot as plt
 
 # CONSTANTS
 MILLISECONDS = 1000
@@ -9,6 +10,9 @@ TIMEOUT = 1.5
 RETRIES = 7
 ICMP_DEST_NOT_REACHABLE = 3
 ICMP_PORT_NOT_REACHABLE = 3
+
+hops = []
+rtt_counts = []
 
 def main(destination):
     print "Destination: " + destination
@@ -76,7 +80,10 @@ def main(destination):
                 print "Packet not varified."
 
             num_hops = ttl - remaining_ttl + 1
+            hops.append(num_hops)
             RTT = (rcv_time - send_time) * MILLISECONDS
+            rtt_counts.append(RTT)
+
             print "Number of Hops: ", num_hops
             print "Round Trip Time: ", RTT
             print '\n'
@@ -91,7 +98,14 @@ def main(destination):
         print "Timed Out."
 
 if __name__ == '__main__':
-    with open('hosts.txt', 'r') as hosts:
+    with open('targets.txt', 'r') as hosts:
         for line in hosts:
             site = line.replace('\n', "")
             main(site)
+
+    plt.plot(hops, rtt_counts, 'ro')
+    plt.ylabel('RTT Values')
+    plt.xlabel('Hop Counts')
+    plt.show()
+
+    print "Finished!"
