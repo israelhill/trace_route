@@ -3,9 +3,12 @@ import select
 import struct
 import time
 
+# CONSTANTS
 MILLISECONDS = 1000
 TIMEOUT = 1.5
 RETRIES = 7
+ICMP_DEST_NOT_REACHABLE = 3
+ICMP_PORT_NOT_REACHABLE = 3
 
 def main(destination):
     print "Destination: " + destination
@@ -22,6 +25,7 @@ def main(destination):
         ttl = 32
         max_hops = 128
 
+        # set up the sockets, specify what protocol each socket will use
         recv_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, icmp)
         send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, udp)
         send_socket.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
@@ -48,10 +52,12 @@ def main(destination):
             # get the IP address
             current_address = current_address[0]
 
+            # get header data using their byte locations
             icmp_header = rcvd_packet[20:28]
             ip_header = rcvd_packet[36:40]
             original_ip_header = rcvd_packet[28:48]
 
+            # Unpack the header data
             icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
             remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
             original_ip_header_data = struct.unpack_from("!BBHHHBBHII", original_ip_header)
@@ -59,11 +65,12 @@ def main(destination):
             dest_port = struct.unpack("!H", rcvd_packet[50:52])[0]
             org_dest_ip = original_ip_header_data[9]
 
+            # Convert IP from unsigned integer to string
             original_destination_ip = socket.inet_ntoa(struct.pack("!L", org_dest_ip))
-            # print "Original destination IP: " +  original_destination_ip
-            # print "Original destination port:", dest_port
 
-            if dest_address == original_destination_ip and port == dest_port :
+            # verify that the packet is the one that I sent originally
+            if (dest_address == original_destination_ip and port == dest_port and
+                icmp_type == ICMP_DEST_NOT_REACHABLE and code == ICMP_PORT_NOT_REACHABLE):
                 print "Packet varified! This is the original packet."
             else :
                 print "Packet not varified."
@@ -72,6 +79,7 @@ def main(destination):
             RTT = (rcv_time - send_time) * MILLISECONDS
             print "Number of Hops: ", num_hops
             print "Round Trip Time: ", RTT
+            print '\n'
             break
 
         except (socket.error, socket.timeout) as e:
