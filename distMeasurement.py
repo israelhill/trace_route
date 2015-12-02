@@ -3,6 +3,7 @@ import select
 import struct
 import time
 import matplotlib.pyplot as plt
+import numpy
 
 # CONSTANTS
 MILLISECONDS = 1000
@@ -102,6 +103,8 @@ if __name__ == '__main__':
         for line in hosts:
             site = line.replace('\n', "")
             main(site)
+
+    print "Correlation: ", numpy.corrcoef(hops, rtt_counts)[0][1]
 
     plt.plot(hops, rtt_counts, 'ro')
     plt.ylabel('RTT Values')
