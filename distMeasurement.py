@@ -4,6 +4,7 @@ import struct
 import time
 
 MILLISECONDS = 1000
+TIMEOUT = 1.5
 
 def main(destination):
     # get the IP address of the destination adress
@@ -23,6 +24,9 @@ def main(destination):
     send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, udp)
     send_socket.setsockopt(socket.SOL_IP, socket.IP_TTL, ttl)
 
+    recv_socket.settimeout(TIMEOUT)
+    send_socket.settimeout(TIMEOUT)
+
     # bind the address to recv_socket. empty string because we are accepting
     # packets from any host on port 33434 (unlikely port)
     recv_socket.bind(("", port))
@@ -31,7 +35,7 @@ def main(destination):
     # on an unlikely port
     send_time = time.time()
     send_socket.sendto("", (destination, port))
-    ready = select.select([recv_socket], [], [], 10.0)
+    ready = select.select([recv_socket], [], [], TIMEOUT)
 
     rcvd_packet = current_address = None
     try:
@@ -49,19 +53,15 @@ def main(destination):
         icmp_type, code, checksum, pid, seq = struct.unpack_from("bbHHh", icmp_header)
         remaining_ttl, protocol, chk_sum = struct.unpack_from("bbH", ip_header)
 
-        print "TTL : ", remaining_ttl, "\n"
-        print "Protocol: ",  code, "\n"
-        print "Checksum: ", checksum, "\n"
-
         num_hops = ttl - remaining_ttl + 1
         RTT = (rcv_time - send_time) * MILLISECONDS
         print "Number of Hops: ", num_hops
         print "Round Trip Time: ", RTT
-    except socket.error:
-        pass
+    except (socket.error, socket.timeout):
+        print "Timed out"
     finally:
         send_socket.close()
         recv_socket.close()
 
 if __name__ == '__main__':
-    main('facebook.com')
+    main('twitter.com')
