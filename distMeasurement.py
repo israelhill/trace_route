@@ -62,6 +62,11 @@ def main(destination):
         print "Original destination IP: " +  original_destination_ip
         print "Original destination port:", dest_port
 
+        if dest_address == original_destination_ip and port == dest_port :
+            print "Packet varified! This is the original packet."
+        else :
+            print "Packet not varified."
+
         num_hops = ttl - remaining_ttl + 1
         RTT = (rcv_time - send_time) * MILLISECONDS
         print "Number of Hops: ", num_hops
