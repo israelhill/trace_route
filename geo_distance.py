@@ -3,25 +3,41 @@ import socket
 from math import sin, cos, asin, sqrt, radians
 from xml.dom.minidom import parseString
 
+#CONSTANTS
 KM = 6367
+distances = []
 
-def main():
+
+
+def main(destination):
+    print "Destination: " + destination
     ip = get_ip()
-    kfc = socket.gethostbyname("kfc.com")
-    # ip2 = "184.51.126.194"
+    dest_ip = socket.gethostbyname(destination)
+
+    # get coordinates for both IP addresses and compute the distane between them
     lat1, long1 = get_location(ip)
-    lat2, long2 = get_location(kfc)
+    lat2, long2 = get_location(dest_ip)
     distance = compute_haversine(lat1, long1, lat2, long2)
-    print "Distance is: ", distance
+    distances.append(distance)
+    print "Distance between hosts: ", distance, " KM"
+    print "\n"
+
+
 
 def get_ip():
+    # lookup the users IP address
     ip = urllib2.urlopen('http://ip.42.pl/raw').read()
     return ip
+
+
 
 def get_location(ip_address):
     print "IP: ", ip_address
 
+    # get the IP's coordinates from the geoip website in xml format
     xml = urllib2.urlopen('http://freegeoip.net/xml/{}'.format(ip_address))
+
+    # parse the xml and get the longitude and Latitude. Remove xml tags
     for line in xml:
         if "<Longitude>" in line:
             longitude = float(line.replace("<Longitude>", "").replace("</Longitude>", ""))
@@ -33,6 +49,8 @@ def get_location(ip_address):
 
     return latitude, longitude
 
+
+# The haversine function as seen at http://www.movable-type.co.uk/scripts/latlong.html
 def compute_haversine(lat1, long1, lat2, long2):
     #convert the coordinates to radians
     latitude1 = radians(lat1)
@@ -51,5 +69,15 @@ def compute_haversine(lat1, long1, lat2, long2):
 
 
 
-if __name__ == '__main__':
-    main()
+
+# if __name__ == '__main__':
+def run():
+    with open('targets.txt', 'r') as hosts:
+        for line in hosts:
+            site = line.replace('\n', "")
+            main(site)
+
+    # for d in distances:
+    #     print d
+
+    return distances

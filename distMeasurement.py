@@ -4,6 +4,7 @@ import struct
 import time
 import matplotlib.pyplot as plt
 import numpy
+import geo_distance as geo
 
 # CONSTANTS
 MILLISECONDS = 1000
@@ -98,14 +99,31 @@ def main(destination):
     else :
         print "Timed Out."
 
+
+
 if __name__ == '__main__':
     with open('targets.txt', 'r') as hosts:
         for line in hosts:
             site = line.replace('\n', "")
             main(site)
 
-    print "Correlation: ", numpy.corrcoef(hops, rtt_counts)[0][1]
+    dist_array = geo.run()
+    for d in dist_array:
+        print d
 
+    print "Correlation Hops vs Distance: ", numpy.corrcoef(hops, dist_array)[0][1]
+    plt.plot(hops, dist_array, 'ro')
+    plt.xlabel('Number of Hops')
+    plt.ylabel('Geographical Distance')
+    plt.show()
+
+    print "Correlation RTT vs Distance: ", numpy.corrcoef(rtt_counts, dist_array)[0][1]
+    plt.plot(rtt_counts, dist_array, 'ro')
+    plt.xlabel('RTT')
+    plt.ylabel('Geographical Distance')
+    plt.show()
+
+    print "Correlation Hops vs RTT: ", numpy.corrcoef(hops, rtt_counts)[0][1]
     plt.plot(hops, rtt_counts, 'ro')
     plt.ylabel('RTT Values')
     plt.xlabel('Hop Counts')
